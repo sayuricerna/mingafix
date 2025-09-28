@@ -9,14 +9,16 @@ import NewReportStep3 from './pages/NewReportPage3';
 import SuccessNotificationPage from './pages/SuccessNotificationPage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
+import RegisterPage from './pages/RegisterPage';
 function App() {
   return (
     <Routes>
       <Route path="/" element={<LoginPage />} /> 
       <Route path="/login" element={<LoginPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="*" element={<NotFoundPage/>} />
-      <Route path="/register" element={<div>Register Page (Por implementar)</div>} />
+      <Route path="/register" element={<RegisterPage/>} />
       <Route path="/report/step1" element={<NewReportStep1/>} />
       <Route path="/report/step2" element={<NewReportStep2/>} />
       <Route path="/report/step3" element={<NewReportStep3/>} />

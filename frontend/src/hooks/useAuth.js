@@ -1,6 +1,5 @@
-// src/hooks/useAuth.js
 import { useState } from 'react';
-import { login as loginService } from '../services/authService';
+import { login as loginService,register as registerService } from '../services/authService';
 
 const getInitialState = () => {
   const user = localStorage.getItem('user');
@@ -43,7 +42,39 @@ const useAuth = () => {
       setLoading(false);
     }
   };
+    
+  const register = async (formData) => {
+    setLoading(true);
+    setError(null);
 
+    try {
+      const data = await registerService(formData);
+      const { token: receivedToken, ...userData } = data; 
+      
+      if (receivedToken) {
+          setToken(receivedToken);
+          setUser(userData);
+          localStorage.setItem('token', receivedToken);
+          localStorage.setItem('user', JSON.stringify(userData));
+      }
+
+      return true;
+
+    } catch (err) {
+      const errorData = err.response?.data;
+      
+     let errorMessage = "Error en el registro.";
+      
+      if (errorData) {
+          errorMessage = Object.values(errorData).flat().join(' | ') || errorMessage;
+      }
+      
+      setError(errorMessage);
+      throw new Error(errorMessage); 
+    } finally {
+      setLoading(false);
+    }
+  };
   const logout = () => {
     setUser(null);
     setToken(null);

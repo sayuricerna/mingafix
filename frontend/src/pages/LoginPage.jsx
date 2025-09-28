@@ -74,7 +74,6 @@ const LoginPage = () => {
           className="w-full p-4 mb-6 border border-gray-300 rounded-lg focus:outline-none focus:border-azul-claro transition duration-150"
         />
         
-        {/* === BOTÓN DE INGRESO CON MANEJO DE LOADING === */}
         <button 
           type="submit"
           disabled={loading}
@@ -88,7 +87,6 @@ const LoginPage = () => {
         </button>
       </form>
 
-      {/* ... Links de Registrarse / Olvidé contraseña ... */}
       <div className="flex justify-center w-full mt-4 space-x-4">
         <button 
           onClick={() => navigate('/register')}

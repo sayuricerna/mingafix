@@ -1,6 +1,6 @@
 import React from 'react';
 import MainLayout from '../layouts/MainLayout';
-import Map from '../components/Map'; // Importa el componente reutilizable
+import Map from '../components/Map'; 
 
 const MapPage = () => {
 <div className="w-full h-80 rounded-lg shadow-lg overflow-hidden">
