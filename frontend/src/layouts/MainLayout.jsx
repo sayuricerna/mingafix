@@ -16,8 +16,6 @@ const MainLayout = ({ children }) => {
         {children}
       </main>
       <AddReportButton onClick={handleAddReport} />
-
-      {/* La Barra de Navegación inferior */}
       <Navbar />
 
     </div>

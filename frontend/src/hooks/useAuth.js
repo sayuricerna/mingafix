@@ -1,35 +1,67 @@
-import { useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext'; 
+// src/hooks/useAuth.js
+import { useState } from 'react';
+import { login as loginService } from '../services/authService';
+
+const getInitialState = () => {
+  const user = localStorage.getItem('user');
+  const token = localStorage.getItem('token');
+  return {
+    user: user ? JSON.parse(user) : null,
+    token: token || null,
+  };
+};
 
 const useAuth = () => {
-  const [user, setUser] = useState(null); // null si no está logueado
-  const [isLoading, setIsLoading] = useState(false);
+  const initialState = getInitialState();
+  const [user, setUser] = useState(initialState.user);
+  const [token, setToken] = useState(initialState.token);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const login = async (email, password) => {
-    setIsLoading(true);
+    setLoading(true);
     setError(null);
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      if (email === "test@minga.com" && password === "1234") {
-        setUser({ id: 1, name: "Sayuri Cerna", email });
-        localStorage.setItem('user', JSON.stringify({ name: "Sayuri Cerna" }));
-      } else {
-        throw new Error("Credenciales inválidas.");
-      }
+      const data = await loginService(email, password);
+      
+      const { token: receivedToken, ...userData } = data; // Separamos el token
+      setToken(receivedToken);
+      setUser(userData);
+      localStorage.setItem('token', receivedToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      return true;
+
     } catch (err) {
-      setError(err.message);
+      const errorMessage = err.response?.data?.detail || 
+                           err.message || 
+                           "Error de red o credenciales incorrectas.";
+      setError(errorMessage);
+      throw new Error(errorMessage); 
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const logout = () => {
     setUser(null);
+    setToken(null);
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   };
 
-  return { user, isLoading, error, login, logout };
+  return {
+    user,
+    token,
+    isAuthenticated: !!token,
+    loading,
+    error,
+    login,
+    logout,
+    setError,
+
+  };
 };
 
 export default useAuth;
